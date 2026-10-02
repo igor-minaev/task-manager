@@ -2,6 +2,7 @@
 import {DashboardOutlined, UnorderedListOutlined} from "@ant-design/icons";
 import {Layout, Menu} from "antd";
 import Link from "next/link";
+import {usePathname} from "next/navigation";
 import {useState} from "react";
 
 const {Sider} = Layout;
@@ -13,12 +14,13 @@ const items = [
 
 export default function AppSidebar() {
     const [collapsed, setCollapsed] = useState(false)
+    const pathname = usePathname()
     return (
         <Sider collapsible
                collapsed={collapsed}
                onCollapse={(value) => setCollapsed(value)}
                width={200}>
-            <Menu mode='inline' items={items}/>
+            <Menu mode='inline' items={items} selectedKeys={[pathname]}/>
         </Sider>
     )
 }
