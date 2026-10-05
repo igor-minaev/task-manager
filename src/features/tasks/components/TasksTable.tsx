@@ -1,51 +1,13 @@
 "use client"
-import type {Task, TaskPriority, TaskStatus} from "@/features/tasks/types";
+import {priorityConfig, statusConfig} from "@/features/tasks/config/taskConfig";
+import type {Task} from "@/features/tasks/types";
 import {Table, type TableColumnsType, Tag} from "antd";
+import Link from "next/link";
 
 type TasksTableProps = {
     tasks: Task[]
 }
-type StatusConfig = {
-    label: string,
-    color: string
-}
 
-type PriorityConfig = {
-    label: string,
-    color: string
-}
-
-const priorityConfig: Record<TaskPriority, PriorityConfig> = {
-    low: {
-        label: 'Low',
-        color: "yellow"
-    },
-    medium: {
-        label: "Medium",
-        color: 'orange'
-    },
-    high: {
-        label: 'High',
-        color: "red"
-    }
-}
-
-
-const statusConfig: Record<TaskStatus, StatusConfig> = {
-    todo: {
-        label: 'Todo',
-        color: "purple"
-    },
-    in_progress: {
-        label: "In progress",
-        color: "magenta"
-    },
-    done: {
-        label: "Done",
-        color: "green"
-
-    }
-}
 
 
 const columns: TableColumnsType<Task> = [
@@ -76,6 +38,12 @@ const columns: TableColumnsType<Task> = [
             return dueDate ?? '-'
         }
     },
+    {
+        title:"Actions",
+        render:(_,record)=>{
+            return <Link href={`/tasks/${record.id}`}>View</Link>
+        }
+    }
 
 ]
 
