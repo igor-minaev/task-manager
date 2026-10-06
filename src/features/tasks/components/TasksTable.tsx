@@ -1,13 +1,9 @@
 "use client"
 import {priorityConfig, statusConfig} from "@/features/tasks/config/taskConfig";
+import {useTasks} from "@/features/tasks/context/TasksContext";
 import type {Task} from "@/features/tasks/types";
 import {Table, type TableColumnsType, Tag} from "antd";
 import Link from "next/link";
-
-type TasksTableProps = {
-    tasks: Task[]
-}
-
 
 
 const columns: TableColumnsType<Task> = [
@@ -39,14 +35,15 @@ const columns: TableColumnsType<Task> = [
         }
     },
     {
-        title:"Actions",
-        render:(_,record)=>{
+        title: "Actions",
+        render: (_, record) => {
             return <Link href={`/tasks/${record.id}`}>View</Link>
         }
     }
 
 ]
 
-export default function TasksTable({tasks}: TasksTableProps) {
+export default function TasksTable() {
+    const {tasks} = useTasks()
     return <Table<Task> rowKey="id" dataSource={tasks} columns={columns}/>
 }
