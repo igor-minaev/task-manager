@@ -5,6 +5,7 @@ import {useTasks} from "@/features/tasks/context/TasksContext";
 import type {Task, TaskPriority, TaskStatus} from "@/features/tasks/types";
 import {Button, DatePicker, Form, Input, Select} from "antd";
 import type {Dayjs} from "dayjs";
+import {useRouter} from "next/navigation";
 
 type CreateTaskFormValues = {
     title: string
@@ -15,6 +16,7 @@ type CreateTaskFormValues = {
 }
 
 export default function CreateTaskForm() {
+    const router = useRouter()
     const {addTask} = useTasks()
     const handleSubmit = (values: CreateTaskFormValues) => {
         const dueDate = values.dueDate?.format('YYYY-MM-DD')
@@ -28,6 +30,7 @@ export default function CreateTaskForm() {
             dueDate
         }
         addTask(newTask)
+        router.push('/tasks')
     }
     const statusOptions = Object.entries(statusConfig).map(([key, config]) => ({value: key, label: config.label}))
     const priorityOptions = Object.entries(priorityConfig).map(([key, config]) => ({value: key, label: config.label}))
