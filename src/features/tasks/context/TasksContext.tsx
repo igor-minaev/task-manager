@@ -10,6 +10,7 @@ type TasksProviderProps = {
 type TasksContextValue = {
     tasks: Task[]
     addTask: (task: Task) => void
+    deleteTask: (taskId: string) => void
 }
 
 const TasksContext = createContext<TasksContextValue | undefined>(undefined)
@@ -17,11 +18,14 @@ const TasksContext = createContext<TasksContextValue | undefined>(undefined)
 export default function TasksProvider({children}: TasksProviderProps) {
     const [tasks, setTasks] = useState<Task[]>(mockTasks)
     const addTask = (task: Task) => {
-        setTasks(prevTasks=>([...prevTasks, task]))
+        setTasks(prevTasks => ([...prevTasks, task]))
+    }
+    const deleteTask=(taskId:string)=>{
+        setTasks(prevTasks=>prevTasks.filter(task=>task.id!==taskId))
     }
 
     return (
-        <TasksContext.Provider value={{tasks, addTask}}>
+        <TasksContext.Provider value={{tasks, addTask,deleteTask}}>
             {children}
         </TasksContext.Provider>
     )

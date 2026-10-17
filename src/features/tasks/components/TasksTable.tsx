@@ -2,50 +2,12 @@
 import {priorityConfig, statusConfig} from "@/features/tasks/config/taskConfig";
 import {useTasks} from "@/features/tasks/context/TasksContext";
 import type {Task, TaskPriority, TaskStatus} from "@/features/tasks/types";
-import {Input, Select, Table, type TableColumnsType, Tag} from "antd";
+import {Button, Input, Popconfirm, Select, Space, Table, type TableColumnsType, Tag} from "antd";
 import Link from "next/link";
 import {type ChangeEvent, useState} from "react";
 
 type StatusFilter = TaskStatus | 'all'
 type PriorityFilter = TaskPriority | 'all'
-
-
-const columns: TableColumnsType<Task> = [
-    {
-        title: "Title",
-        dataIndex: "title"
-    },
-    {
-        title: "Status",
-        dataIndex: "status",
-        render: (_, record) => {
-            const config = statusConfig[record.status]
-            return <Tag color={config.color}>{config.label}</Tag>
-        }
-    },
-    {
-        title: "Priority",
-        dataIndex: "priority",
-        render: (_, record) => {
-            const config = priorityConfig[record.priority]
-            return <Tag color={config.color}>{config.label}</Tag>
-        }
-    },
-    {
-        title: "Due date",
-        dataIndex: "dueDate",
-        render: (dueDate: Task["dueDate"]) => {
-            return dueDate ?? '-'
-        }
-    },
-    {
-        title: "Actions",
-        render: (_, record) => {
-            return <Link href={`/tasks/${record.id}`}>View</Link>
-        }
-    }
-
-]
 
 const statusOptions = [
     {value:'all',label:'All statuses'},
@@ -57,10 +19,62 @@ const priorityOptions = [
 ]
 
 export default function TasksTable() {
-    const {tasks} = useTasks()
+    const {tasks,deleteTask} = useTasks()
     const [search, setSearch] = useState('')
     const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
     const [priorityFilter, setPriorityFilter] = useState<PriorityFilter>('all')
+
+    const columns: TableColumnsType<Task> = [
+        {
+            title: "Title",
+            dataIndex: "title"
+        },
+        {
+            title: "Status",
+            dataIndex: "status",
+            render: (_, record) => {
+                const config = statusConfig[record.status]
+                return <Tag color={config.color}>{config.label}</Tag>
+            }
+        },
+        {
+            title: "Priority",
+            dataIndex: "priority",
+            render: (_, record) => {
+                const config = priorityConfig[record.priority]
+                return <Tag color={config.color}>{config.label}</Tag>
+            }
+        },
+        {
+            title: "Due date",
+            dataIndex: "dueDate",
+            render: (dueDate: Task["dueDate"]) => {
+                return dueDate ?? '-'
+            }
+        },
+        {
+            title: "Actions",
+            key:'actions',
+            render: (_, record) => {
+                return (
+                    <Space size='small'>
+                        <Link href={`/tasks/${record.id}`}>View</Link>
+                        <Popconfirm
+                            title="Delete task?"
+                            description="Are you sure you want to delete this task?"
+                            onConfirm={()=>deleteTask(record.id)}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button danger type='text'>Delete</Button>
+                        </Popconfirm>
+
+                        </Space>
+                )
+            }
+        }
+
+    ]
 
     const onSearchHandler = (e: ChangeEvent<HTMLInputElement>) => setSearch(e.currentTarget.value)
 
