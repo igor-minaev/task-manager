@@ -1,6 +1,6 @@
 "use client"
 import {tasks as mockTasks} from "@/features/tasks/mocks/tasks";
-import type {Task} from "@/features/tasks/types";
+import type {Task, TaskUpdates} from "@/features/tasks/types";
 import {createContext, type ReactNode, useContext, useState} from "react";
 
 type TasksProviderProps = {
@@ -11,6 +11,7 @@ type TasksContextValue = {
     tasks: Task[]
     addTask: (task: Task) => void
     deleteTask: (taskId: string) => void
+    updateTask: (taskId: string, updates: TaskUpdates) => void
 }
 
 const TasksContext = createContext<TasksContextValue | undefined>(undefined)
@@ -20,12 +21,16 @@ export default function TasksProvider({children}: TasksProviderProps) {
     const addTask = (task: Task) => {
         setTasks(prevTasks => ([...prevTasks, task]))
     }
-    const deleteTask=(taskId:string)=>{
-        setTasks(prevTasks=>prevTasks.filter(task=>task.id!==taskId))
+    const deleteTask = (taskId: string) => {
+        setTasks(prevTasks => prevTasks.filter(task  => task.id !== taskId))
+    }
+
+    const updateTask = (taskId: string, updates: TaskUpdates) => {
+        setTasks(prevTasks => prevTasks.map(task => task.id === taskId ? {...task, ...updates} : task))
     }
 
     return (
-        <TasksContext.Provider value={{tasks, addTask,deleteTask}}>
+        <TasksContext.Provider value={{tasks, addTask, deleteTask, updateTask}}>
             {children}
         </TasksContext.Provider>
     )

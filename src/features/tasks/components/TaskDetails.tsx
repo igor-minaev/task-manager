@@ -1,6 +1,7 @@
 import {priorityConfig, statusConfig} from "@/features/tasks/config/taskConfig";
 import type {Task} from "@/features/tasks/types";
 import {Descriptions, Tag} from "antd";
+import Link from "next/link";
 
 type TaskDetailsProps = {
     task: Task
@@ -42,5 +43,10 @@ export default function TaskDetails({task}: TaskDetailsProps) {
             children: task.dueDate ?? '-'
         }
     ]
-    return <Descriptions items={items}/>
+    return (
+        <>
+            <Descriptions items={items}/>
+            <Link href={`/tasks/${task.id}/edit`}>Edit task</Link>
+        </>
+    )
 }

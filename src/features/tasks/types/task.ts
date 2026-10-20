@@ -11,3 +11,5 @@
     dueDate?: string
     createdAt: string
 }
+
+ export type TaskUpdates = Partial<Omit<Task, "id" | "createdAt">>;
