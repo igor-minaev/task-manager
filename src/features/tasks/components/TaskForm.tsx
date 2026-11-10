@@ -5,14 +5,15 @@ import {Button, DatePicker, Form, Input, Select} from "antd";
 
 type TaskFormProps = {
     initialValues?: TaskFormValues;
-    onSubmit: (values: TaskFormValues) => void;
+    onSubmit: (values: TaskFormValues) => void | Promise<void>;
     submitText?: string
+    isSubmitting?: boolean
 };
 
 const statusOptions = Object.entries(statusConfig).map(([key, config]) => ({value: key, label: config.label}))
 const priorityOptions = Object.entries(priorityConfig).map(([key, config]) => ({value: key, label: config.label}))
 
-export default function TaskForm({initialValues, onSubmit, submitText = 'Save task'}: TaskFormProps) {
+export default function TaskForm({initialValues, onSubmit, submitText = 'Save task', isSubmitting = false}: TaskFormProps) {
     return (
         <Form<TaskFormValues> initialValues={initialValues} onFinish={onSubmit}>
             <Form.Item name='title' label="Title" rules={[
@@ -39,7 +40,7 @@ export default function TaskForm({initialValues, onSubmit, submitText = 'Save ta
             <Form.Item name="dueDate" label="Due date">
                 <DatePicker/>
             </Form.Item>
-            <Button type="primary" htmlType="submit">{submitText}</Button>
+            <Button type="primary" htmlType="submit" loading={isSubmitting}>{submitText}</Button>
         </Form>
     )
 }
