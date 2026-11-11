@@ -17,3 +17,11 @@ export async function createTask(
     }
     return await response.json()
 }
+
+export async function getTasks(): Promise<Task[]> {
+    const response = await fetch('/api/tasks')
+    if (!response.ok) {
+        throw new Error('Failed to fetch tasks')
+    }
+    return await response.json()
+}

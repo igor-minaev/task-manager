@@ -1,4 +1,4 @@
-import {getTasksFromStore} from "@/features/tasks/api/tasksStore";
+import {addTaskToStore, getTasksFromStore} from "@/features/tasks/api/tasksStore";
 import type {CreateTaskDto} from "@/features/tasks/api/types";
 import type {Task} from "@/features/tasks/types";
 
@@ -17,5 +17,6 @@ export async function POST(request: Request) {
         id: crypto.randomUUID(),
         createdAt: new Date().toISOString(),
     }
-    return Response.json(newTask,{status:201})
+    const createdTask = addTaskToStore(newTask)
+    return Response.json(createdTask, {status: 201})
 }
