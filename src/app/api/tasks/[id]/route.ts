@@ -1,14 +1,15 @@
+import {updateTaskInStore} from "@/features/tasks/api/tasksStore";
 import type {UpdateTaskDto} from "@/features/tasks/api/types";
 import {tasks} from "@/features/tasks/mocks/tasks";
 
 export async function GET(
     _request: Request,
-    {params}: { params: Promise<{ id: string }>}
+    {params}: { params: Promise<{ id: string }> }
 ) {
     const {id} = await params
-    const task = tasks.find(task=>task.id === id)
-    if(!task){
-        return Response.json({ message: "Task not found" }, {
+    const task = tasks.find(task => task.id === id)
+    if (!task) {
+        return Response.json({message: "Task not found"}, {
             status: 404,
         });
     }
@@ -20,13 +21,12 @@ export async function GET(
 export async function PATCH(
     request: Request,
     {params}: { params: Promise<{ id: string }>; }
-){
+) {
     const {id} = await params
-    const updates:UpdateTaskDto = await request.json()
-    const task = tasks.find(task=>task.id === id)
-    const updatedTask = {...task,...updates}
-    if(!task){
-        return Response.json({ message: "Task not found" }, {
+    const updates: UpdateTaskDto = await request.json()
+    const updatedTask = updateTaskInStore(id, updates)
+    if (!updatedTask) {
+        return Response.json({message: "Task not found"}, {
             status: 404,
         });
     }

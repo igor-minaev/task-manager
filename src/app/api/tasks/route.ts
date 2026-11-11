@@ -1,8 +1,9 @@
+import {getTasksFromStore} from "@/features/tasks/api/tasksStore";
 import type {CreateTaskDto} from "@/features/tasks/api/types";
-import {tasks} from "@/features/tasks/mocks/tasks";
 import type {Task} from "@/features/tasks/types";
 
 export async function GET() {
+    const tasks = getTasksFromStore()
     return Response.json(tasks, {
         status: 200,
     });
